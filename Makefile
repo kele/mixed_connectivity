@@ -5,3 +5,7 @@ test_graph: test_graph.cpp graph.hpp
 	
 test_subsets: test_subsets.cpp subsets.hpp
 	${CXX} ${CXXFLAGS} test_subsets.cpp -o bin/$@
+
+.PHONY: run_tests
+run_tests:
+	for x in ./bin/*; do ./$$x; done
