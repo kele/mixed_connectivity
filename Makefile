@@ -1,19 +1,25 @@
-CXXFLAGS=-std=c++11 -g
+CXXFLAGS=-std=c++11 -g -I.
 
-test_graph: test_graph.cpp graph.hpp
-	${CXX} ${CXXFLAGS} test_graph.cpp -o bin/$@
+bin/test_graph: tst/test_graph.cpp graph.hpp bin
+	${CXX} ${CXXFLAGS} tst/test_graph.cpp -o $@
 	
-test_subsets: test_subsets.cpp subsets.hpp
-	${CXX} ${CXXFLAGS} test_subsets.cpp -o bin/$@
+bin/test_subsets: tst/test_subsets.cpp subsets.hpp bin
+	${CXX} ${CXXFLAGS} tst/test_subsets.cpp -o $@
 
-test_ford_fulkerson: test_ford_fulkerson.cpp ford_fulkerson.hpp
-	${CXX} ${CXXFLAGS} test_ford_fulkerson.cpp -o bin/$@
+bin/test_ford_fulkerson: tst/test_ford_fulkerson.cpp ford_fulkerson.hpp bin
+	${CXX} ${CXXFLAGS} tst/test_ford_fulkerson.cpp -o $@
 
-test_edge_connectivity: test_edge_connectivity.cpp edge_connectivity.hpp edge_connectivity.cpp
-	${CXX} ${CXXFLAGS} edge_connectivity.cpp test_edge_connectivity.cpp -o bin/$@
+bin/test_edge_connectivity: tst/test_edge_connectivity.cpp edge_connectivity.hpp edge_connectivity.cpp bin
+	${CXX} ${CXXFLAGS} edge_connectivity.cpp tst/test_edge_connectivity.cpp -o $@
 
-test_connectivity_all: test_connectivity_all.cpp edge_connectivity.hpp edge_connectivity.cpp
-	${CXX} ${CXXFLAGS} edge_connectivity.cpp test_connectivity_all.cpp -o bin/$@
+bin/test_connectivity_all: tst/test_connectivity_all.cpp edge_connectivity.hpp edge_connectivity.cpp bin
+	${CXX} ${CXXFLAGS} edge_connectivity.cpp tst/test_connectivity_all.cpp -o $@
+
+bin:
+	mkdir bin
+
+clean:
+	rm -rf bin
 
 .PHONY: run_tests
 run_tests:

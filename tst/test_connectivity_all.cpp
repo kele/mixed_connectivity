@@ -7,7 +7,7 @@
 
 int main()
 {
-    int size = 7;
+    int size = 4;
 
     std::vector<edge_base_t> all_edges;
     for (int i = 0; i < size; i++)
