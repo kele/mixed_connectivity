@@ -26,19 +26,22 @@ void MixedPathsCounter::operator()(const path_t &path)
 {
     auto new_g = std::make_shared<SimpleGraph>(*m_g);
 
-    for (const auto &e : path)
-    {
-        new_g->remove_vertex(e.start);
-        new_g->remove_vertex(e.stop);
-    }
-
-
     std::cout << "Removing path...\n";
     for (const auto &e : path)
         std::cout << "(" << e.start << ", " << e.stop << ") ";
     std::cout << std::endl;
 
+    for (const auto &e : path)
+    {
+        for (auto v : {e.start, e.stop})
+        {
+            if (v != m_start and v != m_stop)
+                new_g->remove_vertex(v);
+        }
+    }
+
     m_paths_to_remove--;
+    std::cout << m_paths_to_remove << " paths to remove left!" << std::endl;
 
     if (m_paths_to_remove == 0)
     {
@@ -46,11 +49,13 @@ void MixedPathsCounter::operator()(const path_t &path)
                 m_start, m_stop, new_g->size(), new_g->edges());
         std::cout << "edge connectivity (" << m_start << ", " << m_stop << ") = "
             << edge_connectivity << std::endl;
+        std::cout << "Graph:\n" << *new_g << std::endl;
         m_result = std::min(m_result, edge_connectivity);
     }
     else
     {
-        for_all_paths(new_g.get(), m_start, m_stop, *this);
+        auto me = [this](const path_t &p) { this->operator()(p); };
+        for_all_paths(new_g.get(), m_start, m_stop, me);
     }
     m_paths_to_remove++;
 }

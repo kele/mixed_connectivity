@@ -1,7 +1,7 @@
 #include "path.hpp"
 
 /* TODO: rewrite it completely! don't use this internal lambda */
-void for_all_paths(SimpleGraph *g, int start, int stop, const functor_t &f)
+void for_all_paths(SimpleGraph *g, int start, int stop, functor_t f)
 {
     path_t path;
     std::set<int> visited; // TODO: change it to a vector
