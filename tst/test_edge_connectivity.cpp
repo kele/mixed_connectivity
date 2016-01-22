@@ -30,9 +30,13 @@ int main()
     {
         for (int j = i + 1; j < size; j++)
         {
-            std::cout << i << " and " << j << " are " << get_edge_connectivity(i, j, size, petersen_graph) << " connected.\n";
+            int c = get_edge_connectivity(i, j, size, petersen_graph);
+            if (c != 3)
+            {
+                std::cerr << i << " and " << j << " are " << c << " connected!";
+                throw -1;
+            }
         }
     }
-
     return 0;
 }
