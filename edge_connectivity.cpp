@@ -20,9 +20,7 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
         g.add_edge(fr);
     }
 
-    FordFulkerson<decltype(g)> maxf;
-
-    maxf.ford_fulkerson(&g, start, stop);
+    FordFulkerson::maxflow(&g, start, stop);
 
     int sum = 0;
     for (const auto &e : g.neighbours(start))

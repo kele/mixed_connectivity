@@ -29,9 +29,7 @@ int main()
     g.add_edge(f2);
     g.add_edge(fr2);
 
-    FordFulkerson<decltype(g)> maxf;
-
-    maxf.ford_fulkerson(&g, 1, 3);
+    FordFulkerson::maxflow(&g, 1, 3);
 
     int sum = 0;
     for (auto e : g.neighbours(1))

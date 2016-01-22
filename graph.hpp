@@ -1,10 +1,12 @@
 #pragma once
+// TODO: move implementation to impl header
 #include <type_traits>
 #include <functional>
 #include <vector>
 #include <ostream>
 #include <cstdint>
 #include <stdexcept>
+#include <algorithm>
 
 
 struct edge_base_t
@@ -26,6 +28,7 @@ struct edge_base_t
 inline std::ostream& operator<<(std::ostream &os, const edge_base_t &e)
 {
     os << e.start << " --> " << e.stop;
+    return os;
 }
 
 /* TODO: what about the container type for edges? */
@@ -43,11 +46,29 @@ public:
     {
     }
 
+    void remove_vertex(int v)
+    {
+        E[v].clear();
+
+        for (int i = 0; i < size(); i++)
+        {
+            auto it = std::remove_if(E[i].begin(), E[i].end(), [v](const edge_t &e) { return e.stop == v; });
+            E[i].erase(it, E[i].end());
+        }
+    }
+
     void for_each_edge(std::function<void(edge_t*)> f)
     {
-        for (auto &edges : E)
-            for (auto &e : edges)
+        for (auto &edges_ : E)
+            for (auto &e : edges_)
                 f(&e);
+    }
+
+    std::vector<edge_t> edges()
+    {
+        std::vector<edge_t> result;
+        for_each_edge([&result] (edge_t *e) { result.push_back(*e); });
+        return result;
     }
 
     size_t size() const
@@ -109,3 +130,5 @@ private:
         return E[u].end();
     }
 };
+
+using SimpleGraph = Graph<>;
