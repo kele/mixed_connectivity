@@ -28,3 +28,14 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
 
     return sum;
 }
+
+int get_edge_connectivity(int start, int stop, SimpleGraph g)
+{
+    std::vector<edge_base_t> es;
+
+    const auto &edges = g.edges();
+    std::transform(edges.begin(), edges.end(), std::back_inserter(es),
+            [](const SimpleGraph::edge_t &e) { return edge_base_t(e); });
+
+    return get_edge_connectivity(start, stop, g.size(), es);
+}
