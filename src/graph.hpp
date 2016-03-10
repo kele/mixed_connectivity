@@ -43,16 +43,20 @@ public:
 
     Graph(size_t n)
         : E(n)
+        , num_of_edges_(0)
     {
     }
 
     void remove_vertex(int v)
     {
+        num_of_edges_ -= E[v].size();
         E[v].clear();
 
         for (int i = 0; i < size(); i++)
         {
             auto it = std::remove_if(E[i].begin(), E[i].end(), [v](const edge_t &e) { return e.stop == v; });
+
+            num_of_edges_ -= std::distance(it, E[i].end());
             E[i].erase(it, E[i].end());
         }
     }
@@ -76,9 +80,15 @@ public:
         return E.size();
     }
 
+    size_t num_of_edges() const
+    {
+        return num_of_edges_;
+    }
+
     void add_edge(edge_t e)
     {
         E[e.start].push_back(e);
+        num_of_edges_++;
     }
 
 
@@ -94,6 +104,8 @@ public:
             throw std::out_of_range("Edge does not exist.");
 
         E[u].erase(it);
+
+        num_of_edges_--;
     }
 
     const std::vector<edge_t> & neighbours(int u) const
@@ -108,6 +120,8 @@ public:
 
 private:
     std::vector<std::vector<edge_t>> E;
+
+    size_t num_of_edges_;
 
     void print(std::ostream &os) const
     {
