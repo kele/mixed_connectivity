@@ -21,3 +21,8 @@ add_executable (test_mixed_paths test_mixed_paths.cpp
     ${SRC}/flow.cpp)
 
 add_executable (test_subsets test_subsets.cpp)
+
+add_executable (test_load_graph test_load_graph.cpp 
+    ${SRC}/load_graph.cpp
+    ${SRC}/load_graph.hpp
+    )

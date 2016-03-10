@@ -1,35 +1,45 @@
-#include "graph.hpp"
+#include "load_graph.hpp"
 
 #include <cstring>
+#include <sstream>
+
+#include "estd.hpp"
 
 namespace
 {
-    const char *SEPARATOR = ";";
+const int SIZE_DELIM = -1;
+const int NEIGH_DELIM = -2;
+const int GRAPH_DELIM = -3;
 } // anonymous namespace
 
 
-SimpleGraph load_graph(const std::string &input_string)
+struct vertex_list
 {
-    char *s = new char[input_string.size()];
-    strcpy(s, input_string.c_str());
+    std::vector<int> neighbours;
+};
 
-    auto token = strtok(s, SEPARATOR);
-    token = strtok(NULL, SEPARATOR); // skip the first (empty) part
 
-    int size; sscanf(token, "n%dg", &size);
+SimpleGraph load_graph(std::istream &&s)
+{
+    int graph_size;
+    s >> graph_size;
 
-    SimpleGraph g(size);
+    int next;
+    s >> next;
+    estd::throw_assert(next == SIZE_DELIM);
 
-    int a = 0;
-    while ((token = strtok(NULL, SEPARATOR)))
+    SimpleGraph g(graph_size);
+
+    int v = 0;
+    while (s >> next, next != GRAPH_DELIM)
     {
-        int x;
-        while (scanf("%d", &x))
-            g.add_edge({a, x});
-        a++;
-    }
+        if (next == NEIGH_DELIM)
+        {
+            v++; continue;
+        }
 
-    delete [] s;
+        g.add_edge({v, next});
+    }
 
     return g;
 }

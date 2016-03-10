@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
+#include <istream>
 
 #include "graph.hpp"
 
-SimpleGraph load_graph(const std::string &input_string);
+SimpleGraph load_graph(std::istream &&s);
