@@ -1,33 +1,60 @@
 #include "path.hpp"
+#include <vector>
 
-/* TODO: rewrite it completely! don't use this internal lambda */
-void for_all_paths(SimpleGraph *g, int start, int stop, functor_t f)
+
+using estd::mut;
+
+namespace
 {
-    path_t path;
-    std::set<int> visited; // TODO: change it to a vector
-
-    std::function<void(int, int)> multi_bfs =
-    [g, &f, &path, &visited, &multi_bfs]
-    (int start_, int stop_)
+    class ForAllPaths
     {
-        visited.insert(start_);
-
-        if (start_ == stop_)
-            f(path);
-
-        for (const auto &e : g->neighbours(start_))
+    public:
+        ForAllPaths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
+            : m_g(g)
+            , m_start(start)
+            , m_stop(stop)
+            , m_f(f)
+            , m_visited(g->size())
         {
-            int next = e.stop;
-            if (visited.count(next) == 0)
-            {
-                path.push_back({start_, next});
-                multi_bfs(next, stop_);
-                path.pop_back();
-            }
         }
 
-        visited.erase(start_);
-    };
+        void exec()
+        {
+            multi_bfs(m_start);
+        }
 
-    multi_bfs(start, stop);
+    private:
+        estd::mutref<SimpleGraph> m_g;
+        int m_start, m_stop;
+        functor_t m_f;
+        path_t m_path;
+        std::vector<bool> m_visited;
+
+        void multi_bfs(int v)
+        {
+            m_visited[v] = true;
+            m_path.push_back(v);
+            if (v == m_stop)
+            {
+                m_f(m_path);
+            }
+            else
+            {
+                for (const auto &e : m_g->neighbours(v))
+                {
+                    const auto u = e.stop;
+                    if (!m_visited[u])
+                        multi_bfs(u);
+                }
+            }
+            m_path.pop_back();
+            m_visited[v] = false;
+        }
+    };
+} // anonymous namespace
+
+void for_all_paths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
+{
+    ForAllPaths falp(g, start, stop, f);
+    falp.exec();
 }
