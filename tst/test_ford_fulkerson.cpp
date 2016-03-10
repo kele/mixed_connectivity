@@ -1,5 +1,8 @@
 #include "ford_fulkerson.hpp"
+
 #include <iostream>
+
+#include "estd.hpp"
 
 int main()
 {
@@ -29,7 +32,7 @@ int main()
     g.add_edge(f2);
     g.add_edge(fr2);
 
-    FordFulkerson::maxflow(&g, 1, 3);
+    FordFulkerson::maxflow(estd::mut(g), 1, 3);
 
     int sum = 0;
     for (auto e : g.neighbours(1))
