@@ -14,15 +14,9 @@ add_executable (test_ford_fulkerson test_ford_fulkerson.cpp
 
 add_executable (test_graph test_graph.cpp)
 
-add_executable (test_mixed_paths test_mixed_paths.cpp
-    ${SRC}/mixed_paths.cpp
-    ${SRC}/edge_connectivity.cpp
-    ${SRC}/path.cpp
-    ${SRC}/flow.cpp)
-
 add_executable (test_subsets test_subsets.cpp)
 
-add_executable (test_load_graph test_load_graph.cpp 
+add_executable (test_load_graph test_load_graph.cpp
     ${SRC}/load_graph.cpp
     ${SRC}/load_graph.hpp
     )
