@@ -1,6 +1,7 @@
 #include "edge_connectivity.hpp"
 #include "ford_fulkerson.hpp"
 #include "graph.hpp"
+#include "estd.hpp"
 
 int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_base_t>& edges)
 {
@@ -10,7 +11,6 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
     {
         auto f = flow_edge_t::create(e.start, e.stop);
         f.flow(0); // This is shared between f and fr
-
         auto fr = f.create_reverse();
 
         f.capacity(1);
@@ -20,7 +20,7 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
         g.add_edge(fr);
     }
 
-    FordFulkerson::maxflow(&g, start, stop);
+    FordFulkerson::maxflow(estd::mut(g), start, stop);
 
     int sum = 0;
     for (const auto &e : g.neighbours(start))
