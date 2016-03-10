@@ -58,3 +58,21 @@ void for_all_paths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f
     ForAllPaths falp(g, start, stop, f);
     falp.exec();
 }
+
+
+void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path)
+{
+    int v = path[0];
+
+    for (int i = 1; i < path.size(); i++)
+    {
+        int u = path[i];
+        g->remove_edge({v, u});
+    }
+}
+
+void extract_path_vertices(estd::mutref<SimpleGraph> g, const path_t &path)
+{
+    for (const auto &v : path)
+        g->remove_vertex(v);
+}
