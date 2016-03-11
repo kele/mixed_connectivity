@@ -8,7 +8,6 @@ int main()
 {
     SimpleGraph g(6);
 
-    // Cykl z dwoma cieciwami (translate)
     for (int i = 0; i < 6; i++)
     {
         g.add_edge({i, (i + 1) % 6});
