@@ -6,10 +6,11 @@ using estd::mut;
 
 namespace
 {
+    template<class G, class F>
     class ForAllPaths
     {
     public:
-        ForAllPaths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
+        ForAllPaths(G g, int start, int stop, F f)
             : m_g(g)
             , m_start(start)
             , m_stop(stop)
@@ -24,9 +25,9 @@ namespace
         }
 
     private:
-        estd::mutref<SimpleGraph> m_g;
+        G m_g;
         int m_start, m_stop;
-        functor_t m_f;
+        F m_f;
         path_t m_path;
         std::vector<bool> m_visited;
 
@@ -55,7 +56,12 @@ namespace
 
 void for_all_paths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
 {
-    ForAllPaths(g, start, stop, f).exec();
+    ForAllPaths<estd::mutref<SimpleGraph>, functor_t>(g, start, stop, f).exec();
+}
+
+void for_all_paths(SimpleGraph g, int start, int stop, functor_const_t f)
+{
+    ForAllPaths<SimpleGraph, functor_const_t>(g, start, stop, f).exec();
 }
 
 
