@@ -20,3 +20,10 @@ add_executable (test_load_graph test_load_graph.cpp
     ${SRC}/load_graph.cpp
     ${SRC}/load_graph.hpp
     )
+
+add_executable (test_mixed_paths test_mixed_paths.cpp
+    ${SRC}/edge_connectivity.cpp
+    ${SRC}/flow.cpp
+    ${SRC}/path.cpp
+    ${SRC}/mixed_paths.cpp
+    )
