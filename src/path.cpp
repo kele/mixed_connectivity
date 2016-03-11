@@ -67,6 +67,8 @@ void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path)
     {
         int u = path[i];
         g->remove_edge({v, u});
+
+        v = u;
     }
 }
 
