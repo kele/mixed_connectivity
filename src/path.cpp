@@ -55,8 +55,7 @@ namespace
 
 void for_all_paths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
 {
-    ForAllPaths falp(g, start, stop, f);
-    falp.exec();
+    ForAllPaths(g, start, stop, f).exec();
 }
 
 
