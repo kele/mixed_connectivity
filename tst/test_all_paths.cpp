@@ -5,7 +5,7 @@
 #include "path.hpp"
 #include "estd.hpp"
 
-void print_path(const std::vector<int> &path)
+void print_path(const std::vector<int> &path, const SimpleGraph&)
 {
     for (const auto &v : path)
         std::cout << v << " ";
@@ -25,5 +25,5 @@ int main()
     /* 1 -> 3 - > 4 */
     /* 1 -> 4 */
 
-    for_all_paths(estd::mut(g), 0, 3, print_path);
+    for_all_paths(g, 0, 3, print_path);
 }

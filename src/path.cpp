@@ -15,7 +15,7 @@ namespace
             , m_start(start)
             , m_stop(stop)
             , m_f(f)
-            , m_visited(g->size())
+            , m_visited(g.size())
         {
         }
 
@@ -37,11 +37,11 @@ namespace
             m_path.push_back(v);
             if (v == m_stop)
             {
-                m_f(m_path);
+                m_f(m_path, m_g);
             }
             else
             {
-                for (const auto &e : m_g->neighbours(v))
+                for (const auto &e : m_g.neighbours(v))
                 {
                     const auto u = e.stop;
                     if (!m_visited[u])
@@ -54,16 +54,10 @@ namespace
     };
 } // anonymous namespace
 
-void for_all_paths(estd::mutref<SimpleGraph> g, int start, int stop, functor_t f)
+void for_all_paths(SimpleGraph g, int start, int stop, functor_t f)
 {
-    ForAllPaths<estd::mutref<SimpleGraph>, functor_t>(g, start, stop, f).exec();
+    ForAllPaths<SimpleGraph, functor_t>(g, start, stop, f).exec();
 }
-
-void for_all_paths(SimpleGraph g, int start, int stop, functor_const_t f)
-{
-    ForAllPaths<SimpleGraph, functor_const_t>(g, start, stop, f).exec();
-}
-
 
 void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path)
 {
