@@ -1,19 +1,31 @@
+#include "catch.hpp"
+
 #include "graph.hpp"
-#include <iostream>
+#include <algorithm>
 
-int main()
+TEST_CASE("Edge adding and removing", "[graph]")
 {
-    Graph<> g(10);
+    Graph<> g(4);
 
-    g.add_edge({1, 2});
-    g.add_edge({1, 2});
-    std::cout << "graph\n" << g << std::endl;
+    std::vector<typename Graph<>::edge_t> edges =
+    {
+        {0, 1}, {2, 3}
+    };
 
-    g.remove_edge({1, 2});
-    std::cout << "graph\n" << g << std::endl;
+    // Step 1
+    for (const auto &e : edges)
+        g.add_edge(e);
 
-    g.add_edge({2, 1});
-    g.add_edge({2, 5});
-    std::cout << "graph\n" << g << std::endl;
+    auto g_edges = g.edges();
 
+    REQUIRE(g_edges.size() == edges.size());
+    REQUIRE(std::equal(g_edges.begin(), g_edges.end(), edges.begin()));
+
+    // Step 2
+    g.remove_edge({0, 1});
+    g_edges = g.edges();
+
+    REQUIRE(g_edges.size() == 1);
+    REQUIRE(g_edges[0].start == 2);
+    REQUIRE(g_edges[0].stop == 3);
 }

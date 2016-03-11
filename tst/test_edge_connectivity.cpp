@@ -1,29 +1,17 @@
-#include <iostream>
+#include "catch.hpp"
+
 #include <algorithm>
 
 #include "edge_connectivity.hpp"
 #include "graph.hpp"
 
-int main()
+TEST_CASE("Petersen's graph", "[edge_connectivity]")
 {
     int size = 10;
     std::vector<edge_base_t> petersen_graph =
     {
-        edge_base_t{0, 1},
-        edge_base_t{1, 2},
-        edge_base_t{2, 3},
-        edge_base_t{3, 4}, 
-        edge_base_t{4, 0},
-        edge_base_t{1, 8},
-        edge_base_t{2, 6},
-        edge_base_t{3, 9},
-        edge_base_t{7, 4},
-        edge_base_t{0, 5},
-        edge_base_t{5, 6},
-        edge_base_t{6, 7},
-        edge_base_t{7, 8},
-        edge_base_t{8, 9},
-        edge_base_t{9, 5}
+        {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 0}, {1, 8}, {2, 6}, {3, 9}, {7, 4}, {0, 5},
+        {5, 6}, {6, 7}, {7, 8}, {8, 9}, {9, 5}
     };
 
     for (int i = 0; i < size; i++)
@@ -31,12 +19,7 @@ int main()
         for (int j = i + 1; j < size; j++)
         {
             int c = get_edge_connectivity(i, j, size, petersen_graph);
-            if (c != 3)
-            {
-                std::cerr << i << " and " << j << " are " << c << " connected!";
-                throw -1;
-            }
+            REQUIRE(c == 3);
         }
     }
-    return 0;
 }

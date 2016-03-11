@@ -25,6 +25,11 @@ struct edge_base_t
     }
 };
 
+inline bool operator==(const edge_base_t &lhs, const edge_base_t &rhs)
+{
+    return lhs.start == rhs.start and lhs.stop == rhs.stop;
+}
+
 inline std::ostream& operator<<(std::ostream &os, const edge_base_t &e)
 {
     os << e.start << " --> " << e.stop;

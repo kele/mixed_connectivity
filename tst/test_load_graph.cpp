@@ -1,5 +1,6 @@
+#include "catch.hpp"
+
 #include <string>
-#include <iostream>
 #include <sstream>
 
 #include "load_graph.hpp"
@@ -31,7 +32,7 @@ const char *test_example = R"(
 5 -1 1 2 3 4 -2 2 3 4 -2 3 4 -2 4 -3
 )";
 
-int main()
+TEST_CASE("Load graph", "[load_graph]")
 {
     std::vector<SimpleGraph> graphs;
 
@@ -78,15 +79,6 @@ int main()
             }
         }
 
-        if (lines[gi] != graph_line_stream.str())
-        {
-            std::cerr << "Error while processing:\n"
-                      << "#" << lines[gi] << "#" << std::endl;
-            std::cerr << "Got:\n"
-                      << "#" << graph_line_stream.str() << "#" << std::endl;
-            throw 0;
-        }
+        REQUIRE(lines[gi] == graph_line_stream.str());
     }
-
-    std::cout << "Done." << std::endl;
 }

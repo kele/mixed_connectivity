@@ -1,10 +1,8 @@
+#include "catch.hpp"
+
 #include "mixed_paths.hpp"
 
-#include "estd.hpp"
-
-using estd::throw_assert;
-
-int main()
+TEST_CASE("A cycle with two chords", "[mixed_paths]")
 {
     SimpleGraph g(6);
 
@@ -25,6 +23,6 @@ int main()
         {0, 3}, {1, 2}, {2, 1}, {3, 0}, {4, 0}
     };
 
-    throw_assert(res.size() == expected.size());
-    throw_assert(std::equal(res.begin(), res.end(), expected.begin()));
+    REQUIRE(res.size() == expected.size());
+    REQUIRE(std::equal(res.begin(), res.end(), expected.begin()));
 }
