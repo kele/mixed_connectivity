@@ -6,4 +6,4 @@
 struct edge_base_t;
 
 int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_base_t>& edges);
-int get_edge_connectivity(int start, int stop, SimpleGraph g);
+int get_edge_connectivity(int start, int stop, SimpleGraph g, bool directed);

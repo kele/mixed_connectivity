@@ -29,13 +29,21 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
     return sum;
 }
 
-int get_edge_connectivity(int start, int stop, SimpleGraph g)
+int get_edge_connectivity(int start, int stop, SimpleGraph g, bool directed)
 {
     std::vector<edge_base_t> es;
 
     const auto &edges = g.edges();
     std::transform(edges.begin(), edges.end(), std::back_inserter(es),
             [](const SimpleGraph::edge_t &e) { return edge_base_t(e); });
+
+    if (directed)
+    {
+        es.erase(
+                std::remove_if(es.begin(), es.end(),
+                    [](const edge_base_t &e) { return e.start > e.stop; }),
+                es.end());
+    }
 
     return get_edge_connectivity(start, stop, g.size(), es);
 }
