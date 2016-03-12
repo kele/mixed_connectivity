@@ -12,3 +12,5 @@ void for_all_paths(SimpleGraph g, int start, int stop, functor_t f);
 
 void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path);
 void extract_path_vertices(estd::mutref<SimpleGraph> g, const path_t &path);
+
+bool are_connected(const SimpleGraph &g, int start, int stop);

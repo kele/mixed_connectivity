@@ -120,6 +120,9 @@ public:
         num_of_edges_--;
     }
 
+    // TODO:
+    // - change this to incident_edges.
+    // - add a real neighbours() method
     const std::vector<edge_t> & neighbours(int u) const
     {
         return E[u];

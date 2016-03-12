@@ -77,3 +77,37 @@ void extract_path_vertices(estd::mutref<SimpleGraph> g, const path_t &path)
     for (const auto &v : path)
         g->remove_vertex(v);
 }
+
+class DepthFirstSearch
+{
+public:
+    explicit DepthFirstSearch(const SimpleGraph &g)
+        : m_g(g)
+        , m_visited(g.size())
+    {}
+
+    // TODO: now this cannot be called twice. Change it.
+    bool dfs(int start, int stop)
+    {
+        if (start == stop) return true;
+        m_visited[start] = true;
+
+        for (auto e : m_g.neighbours(start))
+        {
+            auto v = e.stop;
+            if (!m_visited[v])
+                if (dfs(v, stop))
+                    return true;
+        }
+        return false;
+    }
+
+private:
+    const SimpleGraph &m_g;
+    std::vector<bool> m_visited;
+};
+
+bool are_connected(const SimpleGraph &g, int start, int stop)
+{
+    return DepthFirstSearch(g).dfs(start, stop);
+}
