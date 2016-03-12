@@ -73,10 +73,17 @@ public:
                 f(&e);
     }
 
-    std::vector<edge_t> edges()
+    void for_each_edge(std::function<void(const edge_t*)> f) const
+    {
+        for (auto &edges_ : E)
+            for (auto &e : edges_)
+                f(&e);
+    }
+
+    std::vector<edge_t> edges() const
     {
         std::vector<edge_t> result;
-        for_each_edge([&result] (edge_t *e) { result.push_back(*e); });
+        for_each_edge([&result] (const edge_t *e) { result.push_back(*e); });
         return result;
     }
 
