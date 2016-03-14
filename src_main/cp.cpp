@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     int line_num = 1;
     while (input.good())
     {
-        if (line_num % 1000 == 0)
+        if (line_num % 100 == 0)
             std::cerr << line_num << "...\n";
 
         std::getline(input, line);
