@@ -2,7 +2,7 @@
 #include <limits>
 #include <memory>
 
-#include "graph.hpp"
+#include "digraph.hpp"
 #include "utils.hpp"
 
 /* Helper structure for maxflow algorithms */

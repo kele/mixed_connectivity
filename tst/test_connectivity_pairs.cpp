@@ -10,13 +10,9 @@ TEST_CASE("A cycle with two chords [connectivity pairs]", "[connectivity_pairs]"
     for (int i = 0; i < 6; i++)
     {
         g.add_edge({i, (i + 1) % 6});
-        g.add_edge({(i + 1) % 6, i});
     }
     g.add_edge({0, 2});
-    g.add_edge({2, 0});
-
     g.add_edge({3, 1});
-    g.add_edge({1, 3});
 
     auto res = get_connectivity_pairs(g, 0, 3);
 

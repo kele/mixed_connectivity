@@ -10,12 +10,8 @@ TEST_CASE("A cycle with two chords", "[mixed_paths]")
     for (int i = 0; i < 6; i++)
     {
         g.add_edge({i, (i + 1) % 6});
-        g.add_edge({(i + 1) % 6, i});
     }
     g.add_edge({0, 2});
-    g.add_edge({2, 0});
-
-    g.add_edge({3, 1});
     g.add_edge({1, 3});
 
     auto res = get_mixed_paths_count(g, 0, 3);
@@ -23,6 +19,8 @@ TEST_CASE("A cycle with two chords", "[mixed_paths]")
     {
         {0, 3}, {1, 2}, {2, 1}, {3, 0}, {4, 0}
     };
+
+
 
     REQUIRE(res.size() == expected.size());
     REQUIRE(std::equal(res.begin(), res.end(), expected.begin()));
@@ -36,7 +34,6 @@ TEST_CASE("Mixed path's for Petersen's graph", "[mixed_paths][.]")
     for (const auto &e : petersen_graph_e)
     {
         g.add_edge(e);
-        g.add_edge({e.stop, e.start});
     }
 
     // TODO: fix mixed paths, because apparently, it does not work

@@ -7,6 +7,8 @@
 #include "estd.hpp"
 #include "edge_connectivity.hpp"
 
+#include <iostream>
+
 using namespace estd;
 
 namespace
@@ -61,19 +63,18 @@ namespace
             auto saved_g = m_g_paths_extracted;
 
             // Check edge connectivity without paths deleted before this call
-            int edge_con = get_edge_connectivity(m_start, m_stop, m_g_paths_extracted, true);
+            int edge_con = get_edge_connectivity(m_start, m_stop, m_g_paths_extracted);
+
+            //std::cerr << "Graph: " << std::endl;
+            //m_g_paths_extracted.for_each_edge([](const edge_base_t *e) { std::cerr << *e << "\n"; });
+            //std::cerr << "Edge conn (" << m_start << " -> " << m_stop << "): " << edge_con << "\n\n";
+
             m_cp[m_wip_k] = std::max(m_cp[m_wip_k], edge_con);
 
             // Recurse (find a new path to extract)
             if (m_wip_k < m_k)
             {
-                // TODO: make it better
-                // TODO: actually, it should be done by a special case of graph (undirected graph)
                 extract_path_edges(mut(m_g_paths_extracted), path);
-
-                auto rpath = path;
-                std::reverse(rpath.begin(), rpath.end());
-                extract_path_edges(mut(m_g_paths_extracted), rpath);
 
                 for (int i = 1; i < path.size() - 1; i++)
                     g.remove_vertex(path[i]);

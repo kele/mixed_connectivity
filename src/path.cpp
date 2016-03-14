@@ -86,7 +86,6 @@ public:
         , m_visited(g.size())
     {}
 
-    // TODO: now this cannot be called twice. Change it.
     bool dfs(int start, int stop)
     {
         if (start == stop) return true;

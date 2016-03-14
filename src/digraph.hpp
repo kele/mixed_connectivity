@@ -1,29 +1,26 @@
 #pragma once
-
 #include "graph_common.hpp"
 
-#include <vector>
 #include <algorithm>
-#include <sstream>
+#include <cstdint>
+#include <stdexcept>
+#include <type_traits>
+#include <vector>
+
 
 template<
     class Edge = edge_base_t,
     typename = std::is_base_of<edge_base_t, Edge>
 >
-class Graph
+class Digraph
 {
 public:
     using edge_t = Edge;
 
-    explicit Graph(size_t n)
+    Digraph(size_t n)
         : E(n)
         , num_of_edges_(0)
     {
-    }
-
-    size_t size() const
-    {
-        return E.size();
     }
 
     void remove_vertex(int v)
@@ -34,8 +31,24 @@ public:
         for (int i = 0; i < size(); i++)
         {
             auto it = std::remove_if(E[i].begin(), E[i].end(), [v](const edge_t &e) { return e.stop == v; });
+
+            num_of_edges_ -= std::distance(it, E[i].end());
             E[i].erase(it, E[i].end());
         }
+    }
+
+    void for_each_edge(std::function<void(edge_t*)> f)
+    {
+        for (auto &edges_ : E)
+            for (auto &e : edges_)
+                f(&e);
+    }
+
+    void for_each_edge(std::function<void(const edge_t*)> f) const
+    {
+        for (auto &edges_ : E)
+            for (auto &e : edges_)
+                f(&e);
     }
 
     std::vector<edge_t> edges() const
@@ -45,42 +58,37 @@ public:
         return result;
     }
 
-    void for_each_edge(std::function<void(edge_t*)> f)
+    size_t size() const
     {
-        for (auto &edges_ : E)
-            for (auto &e : edges_)
-                if (e.start < e.stop)
-                    f(&e);
-    }
-    void for_each_edge(std::function<void(const edge_t*)> f) const
-    {
-        for (auto &edges_ : E)
-            for (auto &e : edges_)
-                if (e.start < e.stop)
-                    f(&e);
-    }
-
-    void add_edge(edge_t e)
-    {
-        E[e.start].push_back(e);
-        E[e.stop].emplace_back(reverse(e));
-        num_of_edges_++;
-    }
-
-    void remove_edge(edge_base_t e)
-    {
-        remove_edge(e.start, e.stop);
-    }
-    void remove_edge(int u, int v)
-    {
-        remove_uni_edge(u, v);
-        remove_uni_edge(v, u);
-        num_of_edges_--;
+        return E.size();
     }
 
     size_t num_of_edges() const
     {
         return num_of_edges_;
+    }
+
+    void add_edge(edge_t e)
+    {
+        E[e.start].push_back(e);
+        num_of_edges_++;
+    }
+
+
+    void remove_edge(edge_base_t e)
+    {
+        remove_edge(e.start, e.stop);
+    }
+
+    void remove_edge(int u, int v)
+    {
+        auto it = find_edge(u, v);
+        if (it == E[u].end())
+            throw std::out_of_range("Edge does not exist.");
+
+        E[u].erase(it);
+
+        num_of_edges_--;
     }
 
     // TODO:
@@ -90,6 +98,7 @@ public:
     {
         return E[u];
     }
+
     std::vector<edge_t> & neighbours(int u)
     {
         return E[u];
@@ -97,25 +106,29 @@ public:
 
 private:
     std::vector<std::vector<edge_t>> E;
+
     size_t num_of_edges_;
 
-    void remove_uni_edge(int u, int v)
+    void print(std::ostream &os) const
     {
-        auto it = find_edge(u, v);
-        if (it == E[u].end())
-        {
-            std::stringstream ss;
-            ss << "Edge (" << u << ", " << v << ") does not exist.";
-            throw std::out_of_range(ss.str());
-        }
-        *it = E[u].back();
-        E[u].pop_back();
+        for (unsigned i = 0; i < size(); i++)
+            for (auto e : neighbours(i))
+                os << e << std::endl;
+    }
+
+    friend std::ostream& operator<<(std::ostream &os, const Digraph& g)
+    {
+        g.print(os);
+        return os;
     }
 
     auto find_edge(int u, int v) -> decltype(E[u].begin())
     {
-        return std::find_if(E[u].begin(), E[u].end(), [v](const edge_base_t &e) { return e.stop == v; });
+        for (auto it = E[u].begin(); it != E[u].end(); ++it)
+            if (it->stop == v)
+                return it;
+        return E[u].end();
     }
 };
 
-using SimpleGraph = Graph<>;
+using SimpleDigraph = Digraph<>;

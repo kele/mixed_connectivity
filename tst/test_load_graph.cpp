@@ -64,8 +64,11 @@ TEST_CASE("Load graph", "[load_graph]")
             const auto &neighbours = g.neighbours(i);
             for (const auto &u : neighbours)
             {
-                graph_line_stream << " " << u.stop;
-                edges_printed++;
+                if (u.start < u.stop)
+                {
+                    graph_line_stream << " " << u.stop;
+                    edges_printed++;
+                }
             }
 
             if (edges_printed != g.num_of_edges())

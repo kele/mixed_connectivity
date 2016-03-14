@@ -5,7 +5,7 @@
 
 TEST_CASE("Ford Fulkerson on a simple path", "[ford_fulkerson]")
 {
-    Graph<flow_edge_t> g(5);
+    Digraph<flow_edge_t> g(5);
 
     auto f = flow_edge_t::create(1, 2);
     f.flow(0);

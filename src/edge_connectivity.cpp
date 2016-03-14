@@ -3,11 +3,10 @@
 #include "graph.hpp"
 #include "estd.hpp"
 
-int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_base_t>& edges)
+int get_edge_connectivity(int start, int stop, SimpleGraph g)
 {
-    Graph<flow_edge_t> g(size);
-
-    for (const auto &e : edges)
+    Digraph<flow_edge_t> dg(g.size());
+    for (const auto &e : g.edges())
     {
         auto f = flow_edge_t::create(e.start, e.stop);
         f.flow(0); // This is shared between f and fr
@@ -16,34 +15,14 @@ int get_edge_connectivity(int start, int stop, int size, const std::vector<edge_
         f.capacity(1);
         fr.capacity(1);
 
-        g.add_edge(f);
-        g.add_edge(fr);
+        dg.add_edge(f);
+        dg.add_edge(fr);
     }
 
-    FordFulkerson::maxflow(estd::mut(g), start, stop);
+    FordFulkerson::maxflow(estd::mut(dg), start, stop);
 
     int sum = 0;
-    for (const auto &e : g.neighbours(start))
+    for (const auto &e : dg.neighbours(start))
         sum += e.flow();
-
     return sum;
-}
-
-int get_edge_connectivity(int start, int stop, SimpleGraph g, bool directed)
-{
-    std::vector<edge_base_t> es;
-
-    const auto &edges = g.edges();
-    std::transform(edges.begin(), edges.end(), std::back_inserter(es),
-            [](const SimpleGraph::edge_t &e) { return edge_base_t(e); });
-
-    if (directed)
-    {
-        es.erase(
-                std::remove_if(es.begin(), es.end(),
-                    [](const edge_base_t &e) { return e.start > e.stop; }),
-                es.end());
-    }
-
-    return get_edge_connectivity(start, stop, g.size(), es);
 }

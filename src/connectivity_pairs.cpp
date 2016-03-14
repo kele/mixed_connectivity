@@ -37,6 +37,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
 
         for (size_t l_edges = 0; l_edges < best_l_edges; l_edges++)
         {
+            // TODO: fix subsets implementation instead of doing these if (k) conditions
             vertices_subset.init(vertices, k_vertices);
 
             do {
@@ -48,10 +49,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                         g_vertices_removed.remove_vertex(v);
                 }
 
-                // Removing edges duplicates (a, b), (b, a) are duplicates
                 auto edges = g_vertices_removed.edges();
-                filter_edges(mut(edges));
-
 
                 if (edges.size() <= l_edges)
                 {
@@ -63,15 +61,12 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                 edges_subset.init(edges, l_edges);
 
                 auto g_copy = g_vertices_removed;
-                if (l_edges)
+                if (l_edges > 0)
                 {
                     do {
                         g_vertices_removed = g_copy;
                         for (const auto &e : edges_subset.get())
-                        {
                             g_vertices_removed.remove_edge(e);
-                            g_vertices_removed.remove_edge({e.stop, e.start});
-                        }
 
                         if (!are_connected(g_vertices_removed, start, stop))
                         {

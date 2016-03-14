@@ -5,8 +5,8 @@
 
 namespace FordFulkerson
 {
-    template<class Graph>
-    using IsFlowable = std::is_base_of<flow_edge_t, typename Graph::edge_t>;
+    template<class Digraph>
+    using IsFlowable = std::is_base_of<flow_edge_t, typename Digraph::edge_t>;
 } // namespace FordFulkerson
 
 namespace
@@ -14,19 +14,19 @@ namespace
     using namespace FordFulkerson;
     using namespace estd;
 
-    template<class Graph, typename = IsFlowable<Graph>>
+    template<class Digraph, typename = IsFlowable<Digraph>>
     struct state_t
     {
-        explicit state_t(mutref<Graph> g_) : g(g_) {}
+        explicit state_t(mutref<Digraph> g_) : g(g_) {}
         state_t() = delete;
 
-        Graph &g;
-        std::vector<typename Graph::edge_t*> path;
+        Digraph &g;
+        std::vector<typename Digraph::edge_t*> path;
         std::vector<bool> visited;
     };
 
-    template<class Graph, typename = IsFlowable<Graph>>
-    int dfs(mutref<state_t<Graph>> state, int s, int t)
+    template<class Digraph, typename = IsFlowable<Digraph>>
+    int dfs(mutref<state_t<Digraph>> state, int s, int t)
     {
         state->visited[s] = true;
 
@@ -51,8 +51,8 @@ namespace
         return 0;
     }
 
-    template<class Graph, typename = IsFlowable<Graph>>
-    bool add_flow(mutref<state_t<Graph>> state, int s, int t)
+    template<class Digraph, typename = IsFlowable<Digraph>>
+    bool add_flow(mutref<state_t<Digraph>> state, int s, int t)
     {
         std::fill(state->visited.begin(), state->visited.end(), false);
         state->path.clear();
@@ -75,12 +75,12 @@ namespace FordFulkerson
 
     using namespace estd;
 
-    template<class Graph, typename = IsFlowable<Graph>>
-    void maxflow(mutref<Graph> g, int s, int t)
+    template<class Digraph, typename = IsFlowable<Digraph>>
+    void maxflow(mutref<Digraph> g, int s, int t)
     {
-        using edge_t = typename Graph::edge_t;
+        using edge_t = typename Digraph::edge_t;
 
-        state_t<Graph> state(g);
+        state_t<Digraph> state(g);
 
         state.visited.resize(g->size());
         state.g.for_each_edge([](edge_t* e) { e->flow(0); });
