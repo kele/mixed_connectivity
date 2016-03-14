@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 
+// TODO: does not work for a subset of size 0 :(((
 template<class T>
 class SubsetGenerator final
 {
