@@ -26,6 +26,17 @@ public:
     {
     }
 
+    template<class U, typename = std::is_base_of<U, T>>
+    operator mutref<U>()
+    {
+        return mutref<U>(me);
+    }
+
+    T& operator*()
+    {
+        return me;
+    }
+
     operator T&()
     {
         return me;
