@@ -36,10 +36,6 @@ int main(int argc, char *argv[])
             auto g = load_graph(estd::mut(liness));
             auto edges = g.edges();
 
-            // making the graph undirected
-            for (const auto &e : edges)
-                g.add_edge({e.stop, e.start});
-
             for (int i = 0; i < g.size(); i++)
                 for (int j = i + 1; j < g.size(); j++)
                 {
