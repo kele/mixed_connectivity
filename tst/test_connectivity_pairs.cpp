@@ -3,7 +3,7 @@
 #include "graph.hpp"
 
 
-TEST_CASE("A cycle with two chords connectivity pairs", "[connectivity_pairs]")
+TEST_CASE("A cycle with two chords [connectivity pairs]", "[connectivity_pairs]")
 {
     SimpleGraph g(6);
 
