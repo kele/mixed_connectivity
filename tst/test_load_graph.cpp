@@ -46,7 +46,8 @@ TEST_CASE("Load graph", "[load_graph]")
         if (line != "")
         {
             lines.push_back(line);
-            graphs.push_back(load_graph(std::stringstream(line)));
+            std::stringstream ss(line);
+            graphs.push_back(load_graph(estd::mut(ss)));
         }
     }
 
