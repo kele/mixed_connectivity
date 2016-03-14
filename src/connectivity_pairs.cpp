@@ -31,7 +31,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
     SubsetGenerator<int> vertices_subset;
 
 
-    for (int k_vertices = 1; k_vertices < g.size() - 1; k_vertices++)
+    for (int k_vertices = 0; k_vertices < g.size() - 1; k_vertices++)
     {
         size_t best_l_edges = g.num_of_edges();
 
@@ -41,8 +41,12 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
 
             do {
                 auto g_vertices_removed = g;
-                for (const auto &v : vertices_subset.get())
-                    g_vertices_removed.remove_vertex(v);
+
+                if (k_vertices > 0)
+                {
+                    for (const auto &v : vertices_subset.get())
+                        g_vertices_removed.remove_vertex(v);
+                }
 
                 // Removing edges duplicates (a, b), (b, a) are duplicates
                 auto edges = g_vertices_removed.edges();
@@ -84,6 +88,9 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                         break;
                     }
                 }
+
+                if (k_vertices == 0)
+                    break;
             } while (vertices_subset.next());
         }
 
