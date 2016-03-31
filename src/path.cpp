@@ -1,7 +1,6 @@
 #include "path.hpp"
 #include <vector>
 
-
 using estd::mut;
 
 namespace
@@ -66,6 +65,7 @@ void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path)
     for (int i = 1; i < path.size(); i++)
     {
         int u = path[i];
+
         g->remove_edge({v, u});
 
         v = u;
@@ -74,8 +74,8 @@ void extract_path_edges(estd::mutref<SimpleGraph> g, const path_t &path)
 
 void extract_path_vertices(estd::mutref<SimpleGraph> g, const path_t &path)
 {
-    for (const auto &v : path)
-        g->remove_vertex(v);
+    for (int i = 1; i < path.size() - 1; i++)
+        g->remove_vertex(path[i]);
 }
 
 class DepthFirstSearch

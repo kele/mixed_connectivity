@@ -7,12 +7,12 @@
 #include "estd.hpp"
 #include "edge_connectivity.hpp"
 
-#include <iostream>
-
 using namespace estd;
 
 namespace
 {
+    using std::vector;
+
     // TODO:
     // - think about getting rid of these internal state m_k, m_wip_k, m_g_paths_extracted and so on.
     class MixedPaths
@@ -60,32 +60,23 @@ namespace
 
         void extract_path_and_continue(const path_t &path, SimpleGraph g)
         {
-            auto saved_g = m_g_paths_extracted;
+            auto _saved_g = estd::save(mut(m_g_paths_extracted));
 
             // Check edge connectivity without paths deleted before this call
             int edge_con = get_edge_connectivity(m_start, m_stop, m_g_paths_extracted);
-
-            //std::cerr << "Graph: " << std::endl;
-            //m_g_paths_extracted.for_each_edge([](const edge_base_t *e) { std::cerr << *e << "\n"; });
-            //std::cerr << "Edge conn (" << m_start << " -> " << m_stop << "): " << edge_con << "\n\n";
-
             m_cp[m_wip_k] = std::max(m_cp[m_wip_k], edge_con);
+            extract_path_edges(mut(m_g_paths_extracted), path);
 
             // Recurse (find a new path to extract)
             if (m_wip_k < m_k)
             {
-                extract_path_edges(mut(m_g_paths_extracted), path);
-
-                for (int i = 1; i < path.size() - 1; i++)
-                    g.remove_vertex(path[i]);
+                extract_path_vertices(mut(g), path);
                 m_wip_k++;
 
                 for_all_paths(g, m_start, m_stop, m_f);
 
                 m_wip_k--;
             }
-
-            m_g_paths_extracted = saved_g;
         }
     };
 } // anonymous namespace
@@ -93,5 +84,15 @@ namespace
 std::vector<std::pair<int, int>> get_mixed_paths_count(
     const SimpleGraph &g, int start, int stop)
 {
+#ifdef DEBUG
+    const auto &neighbourhood = g.neighbours(start);
+    estd::throw_assert(
+        0 == std::count_if(
+            neighbourhood.begin(),
+            neighbourhood.end(),
+            [stop] (const edge_base_t &e) { return e.stop == stop; }),
+        "start and stop cannot be neighbours");
+#endif // DEBUG
+
     return MixedPaths(g).get(start, stop);
 }

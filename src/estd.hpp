@@ -53,4 +53,28 @@ private:
 template<class T>
 mutref<T> mut(T &obj) { return mutref<T>(obj); }
 
+
+template<class T>
+class SaveAndRestore
+{
+public:
+    explicit SaveAndRestore(mutref<T> obj)
+        : m_obj(obj)
+        , m_src(obj)
+    {
+    }
+
+    ~SaveAndRestore()
+    {
+        *m_src = m_obj;
+    }
+
+private:
+    T m_obj;
+    mutref<T> m_src;
+};
+
+template<class T>
+SaveAndRestore<T> save(mutref<T> obj) { return SaveAndRestore<T>(obj); }
+
 } // namespace estd

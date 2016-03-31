@@ -1,7 +1,19 @@
+
 #include "catch.hpp"
 
 #include "mixed_paths.hpp"
 #include "extraordinary_graphs.hpp"
+
+#include <iostream>
+
+std::ostream& operator<<(std::ostream &os, const std::vector<std::pair<int, int>> &v)
+{
+    for (auto p : v)
+        os << "(" << p.first << ", " << p.second << ") ";
+
+    return os;
+}
+
 
 TEST_CASE("A cycle with two chords", "[mixed_paths]")
 {
@@ -20,15 +32,12 @@ TEST_CASE("A cycle with two chords", "[mixed_paths]")
         {0, 3}, {1, 2}, {2, 1}, {3, 0}, {4, 0}
     };
 
-
-
     REQUIRE(res.size() == expected.size());
     REQUIRE(std::equal(res.begin(), res.end(), expected.begin()));
 }
 
 
-// TODO: unhide this test after mixed_paths work correctly
-TEST_CASE("Mixed path's for Petersen's graph", "[mixed_paths][.]")
+TEST_CASE("Mixed path's for Petersen's graph", "[mixed_paths]")
 {
     SimpleGraph g(10);
     for (const auto &e : petersen_graph_e)
@@ -36,6 +45,12 @@ TEST_CASE("Mixed path's for Petersen's graph", "[mixed_paths][.]")
         g.add_edge(e);
     }
 
-    // TODO: fix mixed paths, because apparently, it does not work
-    auto mixed_paths_count = get_mixed_paths_count(g, 0, 4);
+    auto res = get_mixed_paths_count(g, 0, 6);
+    std::vector<std::pair<int, int>> expected =
+    {
+        {0, 3}, {1, 2}, {2, 1}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8, 0}
+    };
+
+    REQUIRE(res.size() == expected.size());
+    REQUIRE(std::equal(res.begin(), res.end(), expected.begin()));
 }

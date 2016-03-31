@@ -120,3 +120,11 @@ private:
 };
 
 using SimpleGraph = Graph<>;
+
+inline std::ostream& operator<<(std::ostream &os, const SimpleGraph &g)
+{
+    auto f = [&os](const SimpleGraph::edge_t *e) { os << *e << " | "; };
+    g.for_each_edge(f);
+
+    return os;
+}

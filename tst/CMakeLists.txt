@@ -1,3 +1,5 @@
+SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DDEBUG")
+
 FILE(GLOB TEST_SUITES test_*.cpp)
 add_executable (test_all
     run.cpp
