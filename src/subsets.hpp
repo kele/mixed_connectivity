@@ -4,7 +4,6 @@
 #include <stdexcept>
 
 
-// TODO: does not work for a subset of size 0 :(((
 template<class T>
 class SubsetGenerator final
 {
@@ -31,6 +30,9 @@ public:
 
     bool next()
     {
+        if (m_size == 0)
+            return false;
+
         auto to_move = std::find(m_present.begin(), m_present.end(), true);
         auto encountered = 0;
         while (to_move + 1 != m_present.end())
