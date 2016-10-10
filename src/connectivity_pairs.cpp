@@ -20,9 +20,11 @@ void filter_edges(mutref<std::vector<SimpleGraph::edge_t>> v)
 std::vector<std::pair<int, int>> get_connectivity_pairs(
         const SimpleGraph &g, int start, int stop)
 {
-    std::vector<std::pair<int, int>> res;
+    using namespace std;
 
-    std::vector<int> vertices;
+    vector<pair<int, int>> res;
+
+    vector<int> vertices;
     for (int i = 0; i < g.size(); i++)
         if (i != start and i != stop)
             vertices.push_back(i);
@@ -54,7 +56,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                 if (edges.size() <= l_edges)
                 {
                     // Removing these vertices will make the graph empty.
-                    best_l_edges = std::min(best_l_edges, edges.size());
+                    best_l_edges = min(best_l_edges, edges.size());
                     break;
                 }
 
@@ -70,7 +72,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
 
                         if (!are_connected(g_vertices_removed, start, stop))
                         {
-                            best_l_edges = std::min(best_l_edges, l_edges);
+                            best_l_edges = min(best_l_edges, l_edges);
                             break;
                         }
                     } while (edges_subset.next());
@@ -79,7 +81,7 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                 {
                     if (!are_connected(g_vertices_removed, start, stop))
                     {
-                        best_l_edges = std::min(best_l_edges, l_edges);
+                        best_l_edges = min(best_l_edges, l_edges);
                         break;
                     }
                 }
