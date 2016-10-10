@@ -39,17 +39,13 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
 
         for (size_t l_edges = 0; l_edges < best_l_edges; l_edges++)
         {
-            // TODO: fix subsets implementation instead of doing these if (k) conditions
             vertices_subset.init(vertices, k_vertices);
 
             do {
                 auto g_vertices_removed = g;
 
-                if (k_vertices > 0)
-                {
-                    for (const auto &v : vertices_subset.get())
-                        g_vertices_removed.remove_vertex(v);
-                }
+                for (const auto &v : vertices_subset.get())
+                    g_vertices_removed.remove_vertex(v);
 
                 auto edges = g_vertices_removed.edges();
 
@@ -63,31 +59,17 @@ std::vector<std::pair<int, int>> get_connectivity_pairs(
                 edges_subset.init(edges, l_edges);
 
                 auto g_copy = g_vertices_removed;
-                if (l_edges > 0)
-                {
-                    do {
-                        g_vertices_removed = g_copy;
-                        for (const auto &e : edges_subset.get())
-                            g_vertices_removed.remove_edge(e);
+                do {
+                    g_vertices_removed = g_copy;
+                    for (const auto &e : edges_subset.get())
+                        g_vertices_removed.remove_edge(e);
 
-                        if (!are_connected(g_vertices_removed, start, stop))
-                        {
-                            best_l_edges = min(best_l_edges, l_edges);
-                            break;
-                        }
-                    } while (edges_subset.next());
-                }
-                else
-                {
                     if (!are_connected(g_vertices_removed, start, stop))
                     {
                         best_l_edges = min(best_l_edges, l_edges);
                         break;
                     }
-                }
-
-                if (k_vertices == 0)
-                    break;
+                } while (edges_subset.next());
             } while (vertices_subset.next());
         }
 
